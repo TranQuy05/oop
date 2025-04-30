@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox fx:id="menuBox" spacing="10" alignment="CENTER_LEFT"
+      xmlns:fx="http://javafx.com/javafx"
+      xmlns="http://javafx.com/javafx/8"
+      style="-fx-background-color: #333; -fx-padding: 20px;">
+    <Button text="Danh sách hội viên" />
+    <Button text="Danh sách nhân viên" />
+    <Button text="Đăng nhập" />
+    <Button text="Đăng ký" />
+</VBox>
+
+</AnchorPane>
