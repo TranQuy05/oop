@@ -11,9 +11,12 @@ import java.time.LocalDate;
  * @author dtquy
  */
 public class HLV extends NhanVien{
+    private String lopquanli;
+    private int    sohoivienquanly;
     
-    public HLV(int maNhanVien, String hoTen, String chucVu, int ngaySinh, String gioiTinh, String soDienThoai, String diaChi, LocalDate ngayVaoLam, double soCong) {
-        super(maNhanVien, hoTen, chucVu, ngaySinh, gioiTinh, soDienThoai, diaChi, ngayVaoLam, soCong);
+    
+    public HLV(int maNhanVien, String hoTen, String chucVu, int ngaySinh, String gioiTinh, String soDienThoai, String diaChi, LocalDate ngayVaoLam) {
+        super(maNhanVien, hoTen, chucVu, ngaySinh, gioiTinh, soDienThoai, diaChi, ngayVaoLam);
     }
     
 }
