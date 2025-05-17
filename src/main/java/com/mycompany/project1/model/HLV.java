@@ -18,5 +18,16 @@ public class HLV extends NhanVien{
     public HLV(int maNhanVien, String hoTen, String chucVu, int ngaySinh, String gioiTinh, String soDienThoai, String diaChi, LocalDate ngayVaoLam) {
         super(maNhanVien, hoTen, chucVu, ngaySinh, gioiTinh, soDienThoai, diaChi, ngayVaoLam);
     }
-    
+    public void setLopquanli(String lopquanli){
+        this.lopquanli = lopquanli;
+    }
+    public String getLopquanli(){
+        return lopquanli;
+        }
+    public void setSohoivien(int sohoivienquanli){
+        this.sohoivienquanly = sohoivienquanli;
+    }
+    public int getSohoivien(){
+        return sohoivienquanly;
+    }
 }
