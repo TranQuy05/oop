@@ -20,10 +20,10 @@ public class NhanVien {
      private String soDienThoai; // số điện thoại
      private String diaChi; // địa chỉ
      private LocalDate ngayVaoLam; // ngyaf bắt đầu làm việc
-     private double soCong; // số công trong 1 tháng
+
      
      public NhanVien(int maNhanVien,String hoTen,String chucVu,int ngaySinh,String gioiTinh,
-             String soDienThoai,String diaChi,LocalDate ngayVaoLam,double soCong){
+             String soDienThoai,String diaChi,LocalDate ngayVaoLam){
          this.maNhanVien=maNhanVien;
          this.hoTen = hoTen;
          this.chucVu=chucVu;
@@ -32,7 +32,6 @@ public class NhanVien {
          this.soDienThoai=soDienThoai;
          this.diaChi=diaChi;
          this.ngayVaoLam= ngayVaoLam;
-         this.soCong=soCong;
      }
      public int getMaNhanVien() {
         return maNhanVien;
@@ -97,13 +96,6 @@ public class NhanVien {
         this.ngayVaoLam = ngayVaoLam;
     }
 
-    public double getSoCong() {
-        return soCong;
-    }
-
-    public void setSoCong(double soCong) {
-        this.soCong = soCong;
-    }
      public void hienThiThongTin() {
         System.out.println("===== THÔNG TIN NHÂN VIÊN =====");
         System.out.println("Mã nhân viên: " + maNhanVien);
@@ -113,7 +105,7 @@ public class NhanVien {
         System.out.println("Số điện thoại: " + soDienThoai);
         System.out.println("Địa chỉ: " + diaChi);
         System.out.println("Ngày vào làm: " + ngayVaoLam);
-        System.out.println("Số công: " + soCong);
+   
         System.out.println("================================");
     }
 }
