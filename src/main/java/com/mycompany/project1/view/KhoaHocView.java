@@ -4,16 +4,22 @@
  */
 package com.mycompany.project1.view;
 
-import com.mycompany.project1.model.KhoaHoc;
+import com.mycompany.project1.model.GoiDangKy;
 import com.mycompany.project1.model.NhanVien;
 import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -25,33 +31,59 @@ public class KhoaHocView {
         public KhoaHocView(BorderPane root) {
         this.root = root;
     }
-        public void showKhoaHoc(){
+        public Node showKhoaHoc() {
             VBox container = new VBox(10);
-        container.setPadding(new Insets(20));
-        
-        TableView<KhoaHoc> table = new TableView<>();
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            container.setPadding(new Insets(20));
+            
+            TableView<GoiDangKy> table = new TableView<>();
+            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        TableColumn<KhoaHoc, Integer> colID = new TableColumn<>("Mã Khoá học");
-        colID.setCellValueFactory(new PropertyValueFactory<>("subsID"));
+            TableColumn<GoiDangKy, Integer> colMa = new TableColumn<>("Mã gói");
+            TableColumn<GoiDangKy, String> colLoai = new TableColumn<>("Loại gói");
+            TableColumn<GoiDangKy, String> colGia = new TableColumn<>("Giá");
+            TableColumn<GoiDangKy, String> colThoiGian = new TableColumn<>("Thời hạn");
 
-        TableColumn<KhoaHoc, String> colType = new TableColumn<>("Khóa học");
-        colType.setCellValueFactory(new PropertyValueFactory<>("type"));
+            colMa.setCellValueFactory(new PropertyValueFactory<>("SubsID"));
+            colLoai.setCellValueFactory(new PropertyValueFactory<>("Type"));
+            colGia.setCellValueFactory(new PropertyValueFactory<>("Price"));
+            colThoiGian.setCellValueFactory(new PropertyValueFactory<>("duration"));
 
-        TableColumn<KhoaHoc, String> colPrice = new TableColumn<>("Giá khóa học");
-        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+            table.getColumns().addAll(colMa, colLoai, colGia, colThoiGian);
 
-        TableColumn<KhoaHoc, LocalDate> colDuration = new TableColumn<>("Thời gian diễn ra");
-        colDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
+            // Form nhập thông tin khóa học
+            TextField tfMa = new TextField(); tfMa.setPromptText("Mã khóa học");
+            TextField tfTen = new TextField(); tfTen.setPromptText("Tên khóa học");
+            TextField tfGiaoVien = new TextField(); tfGiaoVien.setPromptText("Giáo viên");
+            TextField tfNgayBatDau = new TextField(); tfNgayBatDau.setPromptText("YYYY-MM-DD");
+            TextField tfNgayKetThuc = new TextField(); tfNgayKetThuc.setPromptText("YYYY-MM-DD");
+            TextField tfHocPhi = new TextField(); tfHocPhi.setPromptText("Học phí");
 
-        
-        table.getColumns().addAll(colID, colType, colPrice, colDuration);
+            HBox form = new HBox(10, tfMa, tfTen, tfGiaoVien, tfNgayBatDau, tfNgayKetThuc, tfHocPhi);
+            form.setAlignment(Pos.CENTER);
 
+            VBox formSection = new VBox(10, new Label("Nhập thông tin khóa học:"), form);
 
+            // Nút để toggle hiển thị form
+            Button btnThem = new Button("Thêm khóa học");
+            btnThem.setOnAction(e -> {
+                if (container.getChildren().contains(formSection)) {
+                    container.getChildren().remove(formSection);
+                    btnThem.setText("➕ Thêm khóa học");
+                } else {
+                    container.getChildren().add(formSection);
+                    btnThem.setText("✖ Ẩn form");
+                }
+            });
 
-        container.getChildren().add(table);
-        root.setCenter(container);
-    }
+            // Giao diện chính
+            container.getChildren().addAll(
+                new Label("Danh sách gói đăng ký:"),
+                table,
+                btnThem
+            );
+
+            return container;
+        }
     }
     
 

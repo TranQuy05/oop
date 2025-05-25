@@ -1,45 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.project1.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- *
- * @author dtquy
- */
 public class LichTap {
-    private LocalDateTime gioTap;
-    private LocalDate thoiGianDen;
-    private LocalDate thoiGianDi;
-    private LocalDate ngayTap;
-    
-    
-    public LocalDateTime getGioTap(){
-        return gioTap;
+    private int lichTapID;
+    private int maLop;         // Mã lớp học
+    private int maHLV;       // Mã HLV
+    private LocalDateTime ThoiGianBatDau;
+    private LocalDateTime ThoiGianKetThuc;
+    private String MoTa;  // Mô tả nội dung buổi học
+
+    public LichTap(int lichTapID, int maLop, int maHLV, LocalDateTime ThoiGianBatDau, LocalDateTime ThoiGianKetThuc, String MoTa) {
+        this.lichTapID = lichTapID;
+        this.maLop = maLop;
+        this.maHLV = maHLV;
+        this.ThoiGianBatDau = ThoiGianBatDau;
+        this.ThoiGianKetThuc = ThoiGianKetThuc;
+        this.MoTa = MoTa;
     }
-    public void setGioTap(LocalDateTime gioTap){
-        this.gioTap = gioTap;   
+
+    // Constructor không có lichTapID (dùng khi chưa biết ID)
+    public LichTap(int maLop, int maHLV, LocalDateTime ThoiGianBatDau, LocalDateTime ThoiGianKetThuc, String MoTa) {
+        this.maLop = maLop;
+        this.maHLV = maHLV;
+        this.ThoiGianBatDau = ThoiGianBatDau;
+        this.ThoiGianKetThuc = ThoiGianKetThuc;
+        this.MoTa = MoTa;
     }
-    public LocalDate getThoiGianDen(){
-        return thoiGianDen;
-    }
-    public void setThoiGianDen(LocalDate thoiGianDen){
-        this.thoiGianDen = thoiGianDen;
-    }
-    public LocalDate getThoiGianDi(){
-        return thoiGianDi;
-    }
-    public void setThoiGianDi(LocalDate thoiGianDi){
-        this.thoiGianDi = thoiGianDi;
-    }
-    public LocalDate getNgayTap(){
-        return ngayTap;
-    }
-    public void setNgayTap(LocalDate ngayTap){
-        this.ngayTap = ngayTap;
-    }
+
+    // Getter & Setter
+    public int getLichTapID() { return lichTapID; }
+    public void setLichTapID(int lichTapID) { this.lichTapID = lichTapID; }
+
+    public int getMaLop() { return maLop; }
+    public void setMaLop(int maLop) { this.maLop = maLop; }
+
+    public int getMaHLV() { return maHLV; }
+    public void setMaHLV(int maHLV) { this.maHLV = maHLV; }
+
+    public LocalDateTime getThoiGianBatDau() { return ThoiGianBatDau; }
+    public void setThoiGianBatDau(LocalDateTime ThoiGianBatDau) { this.ThoiGianBatDau = ThoiGianBatDau; }
+
+    public LocalDateTime getThoiGianKetThuc() { return ThoiGianKetThuc; }
+    public void setThoiGianKetThuc(LocalDateTime ThoiGianKetThuc) { this.ThoiGianKetThuc = ThoiGianKetThuc; }
+
+    public String getMoTa() { return MoTa; }
+    public void setMoTa(String MoTa) { this.MoTa = MoTa; }
 }

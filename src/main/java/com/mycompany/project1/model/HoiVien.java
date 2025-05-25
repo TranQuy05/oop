@@ -12,12 +12,14 @@ import java.time.LocalDate;
 public class HoiVien {
     private int maHoiVien; // Mã thẻ hội viên
     private String hoTen; // Họ tên hội viên
-    private int namSinh;
     private int sdt; // Số điện thoại hội viên
     private String gioiTinh;
     private String diaChi; // Đia chỉ
     private String email;//email cua hoi vien
-    
+    private int namSinh;
+    private int CanCuocCongDan;
+
+
     public int getmaHoiVien(){
     return maHoiVien;}
     public void setmaHoiVien(int maHoiVien){

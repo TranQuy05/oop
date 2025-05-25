@@ -5,45 +5,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LopHoc {
-    private int classID;
-    private String className;
-    private String trainerID;
+    private int maLop;
+    private String TenLop;
+    private String maHLV;
     private LocalDate schedule; 
 
  
     private List<String> memberIDs;
 
-    public LopHoc(int classID, String className, String trainerID, LocalDate schedule) {
-        this.classID = classID;
-        this.className = className;
-        this.trainerID = trainerID;
+    public LopHoc(int maLop, String TenLop, String maNhanVien, LocalDate schedule) {
+        this.maLop = maLop;
+        this.TenLop = TenLop;
+        this.maHLV = maHLV;
         this.schedule = schedule;
         this.memberIDs = new ArrayList<>();
     }
 
     // Getter và Setter
     public int getClassID() {
-        return classID;
+        return maLop;
     }
 
-    public void setClassID(int classID) {
-        this.classID = classID;
+    public void setClassID(int maLop) {
+        this.maLop = maLop;
     }
 
     public String getClassName() {
-        return className;
+        return TenLop;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setClassName(String TenLop) {
+        this.TenLop = TenLop;
     }
 
     public String getTrainerID() {
-        return trainerID;
+        return maHLV;
     }
 
-    public void setTrainerID(String trainerID) {
-        this.trainerID = trainerID;
+    public void setTrainerID(String maHLV) {
+        this.maHLV = maHLV;
     }
 
     public LocalDate getSchedule() {
@@ -69,14 +69,14 @@ public class LopHoc {
 
     // ✅ Method: Cập nhật thông tin lớp
     public void updateClass(String className, String trainerID, LocalDate schedule) {
-        this.className = className;
-        this.trainerID = trainerID;
+        this.TenLop = className;
+        this.maHLV = trainerID;
         this.schedule = schedule;
     }
 
 
     public void viewMemberships() {
-        System.out.println("Danh sách hội viên của lớp " + className + ":");
+        System.out.println("Danh sách hội viên của lớp " + TenLop + ":");
         if (memberIDs.isEmpty()) {
             System.out.println("Chưa có hội viên đăng ký.");
         } else {

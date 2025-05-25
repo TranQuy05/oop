@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 
 import java.time.LocalDate;
 
@@ -19,7 +20,7 @@ public class NhanVienView {
         this.root = root;
     }
 
-    public void showEmployeePage() {
+    public Node showEmployeePage() {
         VBox container = new VBox(10);
         container.setPadding(new Insets(20));
 
@@ -57,7 +58,8 @@ public class NhanVienView {
                                   colSDT, colDiaChi, colNgayVaoLam, colSoCong);
 
         container.getChildren().add(table);
-        root.setCenter(container);
+        
+        return container;
     }
 
    

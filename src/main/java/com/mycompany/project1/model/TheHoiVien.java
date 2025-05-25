@@ -5,42 +5,34 @@
 package com.mycompany.project1.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
  * @author dtquy
  */
-public class TheHoiVien {
+public abstract class TheHoiVien {
     
-    private String maThe;
-    private String maHoiVien;
-    private String loaiThe;
-    private LocalDate ngayKichHoat;
-    private LocalDate ngayHetHan;
-    public String getMathe(){
+    protected int maThe;
+    protected int maHoiVien;
+    protected String loaiThe;
+    protected int classID;
+    protected String SubId;
+    
+    public int getMathe(){
         return maThe;
     }
-    public void setMaThe(String maThe){
+    public void setMaThe(int maThe){
         this.maThe = maThe;
     }
     public String getLoaiThe(){
-        return maThe;
+        return loaiThe;
     }
     public void setLoaiThe(String loaiThe){
         this.loaiThe=loaiThe;
     }
-    public LocalDate getNgayKichHoat(){
-        return ngayKichHoat;
-    }
-    public void setNgayKichHoat(LocalDate ngayKichHoat){
-        this.ngayKichHoat = ngayKichHoat;
-    }
-    public LocalDate getNgayHetHan(){
-        return ngayHetHan;
-    }
-    public void setNgayHetHan(LocalDate ngayHetHan){
-        this.ngayHetHan=ngayHetHan;
     
+    public abstract void QuyenLoi();
+  
 }
 
-}

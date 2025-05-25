@@ -3,31 +3,50 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.project1.model;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
  * @author dtquy
  */
-public class HLV extends NhanVien{
+public class HLV extends User{
     private String lopquanli;
-    private int    sohoivienquanly;
-    
-    
-    public HLV(int maNhanVien, String hoTen, String chucVu, int ngaySinh, String gioiTinh, String soDienThoai, String diaChi, LocalDate ngayVaoLam) {
-        super(maNhanVien, hoTen, chucVu, ngaySinh, gioiTinh, soDienThoai, diaChi, ngayVaoLam);
+    private String ChuyenMon; // chuyên môn hlv
+    private String MoTa; // mô tả kinh nghiệm
+
+    public HLV(int userID, String HoTen, String Email, String Password, String Role, int UserYoB, String Gender, String Address, int PhoneNum, int CitizenIdenNumb) {
+        super(userID, HoTen, Email, Password, Role, UserYoB, Gender, Address, PhoneNum, CitizenIdenNumb);
     }
+
+   
+    
+
+    
     public void setLopquanli(String lopquanli){
         this.lopquanli = lopquanli;
     }
     public String getLopquanli(){
         return lopquanli;
         }
-    public void setSohoivien(int sohoivienquanli){
-        this.sohoivienquanly = sohoivienquanli;
+
+    public void setChuyenMon(String chuyenMon){
+        this.ChuyenMon = chuyenMon;
     }
-    public int getSohoivien(){
-        return sohoivienquanly;
+    public String getChuyenMon(){
+        return ChuyenMon;
+    }
+    
+    public void setMoTa(String moTa){
+        this.MoTa = moTa;
+    }
+    public String getMoTa(){
+        return MoTa;
+    }
+ 
+    public LichTap TaoLichTap(int maLop, LocalDateTime ThoiGianBatDau, LocalDateTime ThoiGianKetThuc, String MoTa) {
+        // Tạo mới lịch học
+        LichTap lichTap = new LichTap(maLop, this.getUserID(), ThoiGianBatDau, ThoiGianKetThuc, MoTa);
+        // Có thể lưu vào database hoặc danh sách nếu cần
+        return lichTap;
     }
 }

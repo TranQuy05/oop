@@ -4,7 +4,7 @@
  */
 package com.mycompany.project1.view;
 
-import com.mycompany.project1.model.KhoaHoc;
+
 import com.mycompany.project1.model.LopHoc;
 import java.time.LocalDate;
 import javafx.geometry.Insets;
@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 
 /**
  *
@@ -30,76 +31,61 @@ public class LopHocView {
         this.root = root;
     }
 
-    public void showLopHoc() {
+    public Node showLopHoc() {
         VBox container = new VBox(10);
         container.setPadding(new Insets(20));
-
 
         TableView<LopHoc> table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        TableColumn<LopHoc, Integer> colID = new TableColumn<>("Mã Lớp");
-        colID.setCellValueFactory(new PropertyValueFactory<>("classID"));
+        TableColumn<LopHoc, Integer> colMa = new TableColumn<>("Mã lớp");
+        TableColumn<LopHoc, String> colTen = new TableColumn<>("Tên lớp");
+        TableColumn<LopHoc, String> colKhoaHoc = new TableColumn<>("Khóa học");
+        TableColumn<LopHoc, String> colGiaoVien = new TableColumn<>("Giáo viên");
+        TableColumn<LopHoc, String> colNgayHoc = new TableColumn<>("Ngày học");
+        TableColumn<LopHoc, String> colGioHoc = new TableColumn<>("Giờ học");
 
-        TableColumn<LopHoc, String> colName = new TableColumn<>("Lớp Học");
-        colName.setCellValueFactory(new PropertyValueFactory<>("className"));
+        colMa.setCellValueFactory(new PropertyValueFactory<>("maLop"));
+        colTen.setCellValueFactory(new PropertyValueFactory<>("tenLop"));
+        colKhoaHoc.setCellValueFactory(new PropertyValueFactory<>("khoaHoc"));
+        colGiaoVien.setCellValueFactory(new PropertyValueFactory<>("giaoVien"));
+        colNgayHoc.setCellValueFactory(new PropertyValueFactory<>("ngayHoc"));
+        colGioHoc.setCellValueFactory(new PropertyValueFactory<>("gioHoc"));
 
-        TableColumn<LopHoc, String> colTrainer = new TableColumn<>("Huấn luyện viên");
-        colTrainer.setCellValueFactory(new PropertyValueFactory<>("trainerID"));
+        table.getColumns().addAll(colMa, colTen, colKhoaHoc, colGiaoVien, colNgayHoc, colGioHoc);
 
-        TableColumn<LopHoc, LocalDate> colSchedule = new TableColumn<>("Lịch học");
-        colSchedule.setCellValueFactory(new PropertyValueFactory<>("schedule"));
+        // Form nhập thông tin lớp học
+        TextField tfMa = new TextField(); tfMa.setPromptText("Mã lớp");
+        TextField tfTen = new TextField(); tfTen.setPromptText("Tên lớp");
+        TextField tfKhoaHoc = new TextField(); tfKhoaHoc.setPromptText("Khóa học");
+        TextField tfGiaoVien = new TextField(); tfGiaoVien.setPromptText("Giáo viên");
+        TextField tfNgayHoc = new TextField(); tfNgayHoc.setPromptText("Ngày học");
+        TextField tfGioHoc = new TextField(); tfGioHoc.setPromptText("Giờ học");
 
-        table.getColumns().addAll(colID, colName, colTrainer, colSchedule);
-
-
-        TextField tfId = new TextField(); tfId.setPromptText("Mã Lớp");
-        TextField tfName = new TextField(); tfName.setPromptText("Tên Lớp");
-        TextField tfTrainerId = new TextField(); tfTrainerId.setPromptText("Mã HLV");
-        TextField tfSchedule = new TextField(); tfSchedule.setPromptText("Lịch học (yyyy-mm-dd)");
-
-        HBox form = new HBox(10, tfId, tfName, tfTrainerId, tfSchedule);
+        HBox form = new HBox(10, tfMa, tfTen, tfKhoaHoc, tfGiaoVien, tfNgayHoc, tfGioHoc);
         form.setAlignment(Pos.CENTER);
-        VBox formSection = new VBox(10, new Label("Nhập thông tin lớp:"), form);
 
-     
-        TextField tfSearchId = new TextField(); tfSearchId.setPromptText("Nhập mã lớp cần tìm");
-        HBox searchBox = new HBox(10, tfSearchId);
-        searchBox.setAlignment(Pos.CENTER);
-        VBox searchSection = new VBox(10, new Label("Tìm kiếm lớp:"), searchBox);
+        VBox formSection = new VBox(10, new Label("Nhập thông tin lớp học:"), form);
 
-        Button btnThem = new Button(" Thêm lớp");
+        // Nút để toggle hiển thị form
+        Button btnThem = new Button("Thêm lớp");
         btnThem.setOnAction(e -> {
             if (container.getChildren().contains(formSection)) {
                 container.getChildren().remove(formSection);
-                btnThem.setText("Thêm lớp");
+                btnThem.setText("➕ Thêm lớp");
             } else {
                 container.getChildren().add(formSection);
-                btnThem.setText(" Ẩn");
+                btnThem.setText("✖ Ẩn form");
             }
         });
 
-    
-        Button btnTimKiem = new Button(" Tìm kiếm");
-        btnTimKiem.setOnAction(e -> {
-            if (container.getChildren().contains(searchSection)) {
-                container.getChildren().remove(searchSection);
-                btnTimKiem.setText(" Tìm kiếm");
-            } else {
-                container.getChildren().add(searchSection);
-                btnTimKiem.setText(" Ẩn");
-            }
-        });
+        // Giao diện chính
+        container.getChildren().addAll(
+            new Label("Danh sách lớp học:"),
+            table,
+            btnThem
+        );
 
-
-       // Giao diện chính
-       container.getChildren().addAll(
-           new Label("Danh sách lớp học: "),
-           table,
-           btnThem,
-           btnTimKiem
-       );
-
-        root.setCenter(container);
+        return container;
     }
-    }
+}

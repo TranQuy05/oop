@@ -10,13 +10,13 @@ import java.time.LocalDate;
  *
  * @author dtquy
  */
-public class KhoaHoc {
+public class GoiDangKy {
     private int SubsID;
     private String Type;
     private String Price;
     private LocalDate duration;
     
-    public KhoaHoc( int SubsID, String Type, String Price, LocalDate duration ){
+    public GoiDangKy( int SubsID, String Type, String Price, LocalDate duration ){
         this.SubsID = SubsID;
         this.Type = Type;
         this.Price = Price;
