@@ -5,34 +5,82 @@
 package com.mycompany.project1.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
  * @author dtquy
  */
-public abstract class TheHoiVien {
-    
-    protected int maThe;
-    protected int maHoiVien;
-    protected String loaiThe;
-    protected int classID;
-    protected String SubId;
-    
-    public int getMathe(){
-        return maThe;
+public class TheHoiVien {
+    private int cardID;
+    private String type;
+    private double price;
+    private int validDuration;
+    private LocalDate purchaseDate;
+    private List<GoiDangKy> danhSachGoi;
+
+    public TheHoiVien() {
     }
-    public void setMaThe(int maThe){
-        this.maThe = maThe;
+
+    public TheHoiVien(int cardID, String type, double price, int validDuration) {
+        this.cardID = cardID;
+        this.type = type;
+        this.price = price;
+        this.validDuration = validDuration;
     }
-    public String getLoaiThe(){
-        return loaiThe;
+
+    // Getters and Setters
+    public int getCardID() {
+        return cardID;
     }
-    public void setLoaiThe(String loaiThe){
-        this.loaiThe=loaiThe;
+
+    public void setCardID(int cardID) {
+        this.cardID = cardID;
     }
-    
-    public abstract void QuyenLoi();
-  
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getValidDuration() {
+        return validDuration;
+    }
+
+    public void setValidDuration(int validDuration) {
+        this.validDuration = validDuration;
+    }
+
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public List<GoiDangKy> getDanhSachGoi() {
+        return danhSachGoi;
+    }
+
+    public void setDanhSachGoi(List<GoiDangKy> danhSachGoi) {
+        this.danhSachGoi = danhSachGoi;
+    }
+
+    // Thêm gói đăng ký mới
+    public void themGoiDangKy(GoiDangKy goi) {
+        danhSachGoi.add(goi);
+    }
 }
 

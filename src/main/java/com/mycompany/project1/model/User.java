@@ -10,19 +10,22 @@ package com.mycompany.project1.model;
  */
 public class User {
     private int UserID;
-    private String HoTen; 
+    private String UserName; 
     private String Email;
     private String Password;
     private String Role;
     private int UserYoB;
     private String Gender;
     private String Address;
-    private int PhoneNum;
-    private int CitizenIdenNumb;
+    private String PhoneNum;
+    private String CitizenIdenNumb;
     
-    public User(int userID, String HoTen, String Email, String Password, String Role,int UserYoB, String Gender, String Address, int PhoneNum, int CitizenIdenNumb ){
+    public User() {
+    }
+    
+    public User(int userID, String UserName, String Email, String Password, String Role,int UserYoB, String Gender, String Address, String PhoneNum, String CitizenIdenNumb ){
         this.UserID = userID;
-        this.HoTen = HoTen;
+        this.UserName = UserName;
         this.Email = Email;
         this.Role = Role;
         this.Password = Password;
@@ -42,22 +45,16 @@ public class User {
     }
 
     // Getter và Setter cho HoTen
-    public String getHoTen() {
-        return HoTen;
+    public String getUserName() {
+        return UserName;
     }
 
-    public void setHoTen(String hoTen) {
-        this.HoTen = hoTen;
+    public void setUserName(String UserName) {
+        this.UserName = UserName;
     }
 
     // Getter và Setter cho Email
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        this.Email = email;
-    }
+  
 
     // Getter và Setter cho Password
     public String getPassword() {
@@ -75,6 +72,62 @@ public class User {
 
     public void setRole(String role) {
         this.Role = role;
+    }
+
+    public int getUserYoB() {
+        return UserYoB;
+    }
+
+    public void setUserYoB(int userYoB) {
+        this.UserYoB = userYoB;
+    }
+
+    public String getGender() {
+        return Gender;
+    }
+
+    public void setGender(String gender) {
+        this.Gender = gender;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        this.Address = address;
+    }
+
+    public String getPhoneNum() {
+        return PhoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.PhoneNum = phoneNum;
+    }
+
+    public String getCitizenIdenNumb() {
+        return CitizenIdenNumb;
+    }
+
+    public void setCitizenIdenNumb(String citizenIdenNumb) {
+        this.CitizenIdenNumb = citizenIdenNumb;
+    }
+
+    public String getUserEmail() {
+        return Email;
+    }
+
+    public void setUserEmail(String email) {
+        this.Email = email;
+    }
+
+    public String getCitizenIdentification() {
+        return CitizenIdenNumb;
+    }
+
+    public void setCitizenIdentification(String citizenIdentification) {
+        this.CitizenIdenNumb = citizenIdentification;
     }
 }
 

@@ -14,7 +14,7 @@ public class HLV extends User{
     private String ChuyenMon; // chuyên môn hlv
     private String MoTa; // mô tả kinh nghiệm
 
-    public HLV(int userID, String HoTen, String Email, String Password, String Role, int UserYoB, String Gender, String Address, int PhoneNum, int CitizenIdenNumb) {
+    public HLV(int userID, String HoTen, String Email, String Password, String Role, int UserYoB, String Gender, String Address, String PhoneNum, String CitizenIdenNumb) {
         super(userID, HoTen, Email, Password, Role, UserYoB, Gender, Address, PhoneNum, CitizenIdenNumb);
     }
 

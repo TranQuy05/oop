@@ -78,8 +78,7 @@ public class KhoaHocView {
             // Giao diện chính
             container.getChildren().addAll(
                 new Label("Danh sách gói đăng ký:"),
-                table,
-                btnThem
+                table                
             );
 
             return container;

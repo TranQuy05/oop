@@ -10,18 +10,45 @@ import java.time.LocalDate;
  *
  * @author dtquy
  */
-public class NhanVien extends User { 
-     private LocalDate ngayVaoLam; // ngày bắt đầu làm việc
+public class NhanVien {
+    private int staffID;
+    private String startWorkingDate;
+    private User user;
 
-    public NhanVien(int userID, String HoTen, String Email, String Password, String Role, int UserYoB, String Gender, String Address, int PhoneNum, int CitizenIdenNumb) {
-        super(userID, HoTen, Email, Password, Role, UserYoB, Gender, Address, PhoneNum, CitizenIdenNumb);
+    public NhanVien() {
     }
-     
-    
 
- 
+    public NhanVien(int staffID, String startWorkingDate, User user) {
+        this.staffID = staffID;
+        this.startWorkingDate = startWorkingDate;
+        this.user = user;
+    }
 
+    public int getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(int staffID) {
+        this.staffID = staffID;
+    }
+
+    public String getStartWorkingDate() {
+        return startWorkingDate;
+    }
+
+    public void setStartWorkingDate(String startWorkingDate) {
+        this.startWorkingDate = startWorkingDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
+
 //     public NhanVien(int maNhanVien,String hoTen,String chucVu,int ngaySinh,String gioiTinh,
 //             String soDienThoai,String diaChi,LocalDate ngayVaoLam){
 //         this.maNhanVien=maNhanVien;

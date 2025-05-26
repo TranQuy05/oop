@@ -5,52 +5,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LopHoc {
-    private int maLop;
-    private String TenLop;
-    private String maHLV;
-    private LocalDate schedule; 
+    private int classID;
+    private String className;
+    private int trainerID;
+    private String trainerName;
+    private String schedule;
 
- 
     private List<String> memberIDs;
 
-    public LopHoc(int maLop, String TenLop, String maNhanVien, LocalDate schedule) {
-        this.maLop = maLop;
-        this.TenLop = TenLop;
-        this.maHLV = maHLV;
+    public LopHoc() {
+    }
+
+    public LopHoc(int classID, String className, int trainerID, String trainerName, String schedule) {
+        this.classID = classID;
+        this.className = className;
+        this.trainerID = trainerID;
+        this.trainerName = trainerName;
         this.schedule = schedule;
         this.memberIDs = new ArrayList<>();
     }
 
-    // Getter và Setter
     public int getClassID() {
-        return maLop;
+        return classID;
     }
 
-    public void setClassID(int maLop) {
-        this.maLop = maLop;
+    public void setClassID(int classID) {
+        this.classID = classID;
     }
 
     public String getClassName() {
-        return TenLop;
+        return className;
     }
 
-    public void setClassName(String TenLop) {
-        this.TenLop = TenLop;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public String getTrainerID() {
-        return maHLV;
+    public int getTrainerID() {
+        return trainerID;
     }
 
-    public void setTrainerID(String maHLV) {
-        this.maHLV = maHLV;
+    public void setTrainerID(int trainerID) {
+        this.trainerID = trainerID;
     }
 
-    public LocalDate getSchedule() {
+    public String getTrainerName() {
+        return trainerName;
+    }
+
+    public void setTrainerName(String trainerName) {
+        this.trainerName = trainerName;
+    }
+
+    public String getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(LocalDate schedule) {
+    public void setSchedule(String schedule) {
         this.schedule = schedule;
     }
 
@@ -62,21 +73,19 @@ public class LopHoc {
         this.memberIDs = memberIDs;
     }
 
-   
-    public static LopHoc addClass(int classID, String className, String trainerID, LocalDate schedule) {
-        return new LopHoc(classID, className, trainerID, schedule);
+    public static LopHoc addClass(int classID, String className, int trainerID, String trainerName, String schedule) {
+        return new LopHoc(classID, className, trainerID, trainerName, schedule);
     }
 
-    // ✅ Method: Cập nhật thông tin lớp
-    public void updateClass(String className, String trainerID, LocalDate schedule) {
-        this.TenLop = className;
-        this.maHLV = trainerID;
+    public void updateClass(String className, int trainerID, String trainerName, String schedule) {
+        this.className = className;
+        this.trainerID = trainerID;
+        this.trainerName = trainerName;
         this.schedule = schedule;
     }
 
-
     public void viewMemberships() {
-        System.out.println("Danh sách hội viên của lớp " + TenLop + ":");
+        System.out.println("Danh sách hội viên của lớp " + className + ":");
         if (memberIDs.isEmpty()) {
             System.out.println("Chưa có hội viên đăng ký.");
         } else {
@@ -86,14 +95,12 @@ public class LopHoc {
         }
     }
 
-   
     public void addMember(String memberID) {
         if (!memberIDs.contains(memberID)) {
             memberIDs.add(memberID);
         }
     }
 
-    // Optional: Xóa hội viên
     public void removeMember(String memberID) {
         memberIDs.remove(memberID);
     }

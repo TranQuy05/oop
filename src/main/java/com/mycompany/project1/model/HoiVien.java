@@ -17,40 +17,55 @@ public class HoiVien {
     private String diaChi; // Đia chỉ
     private String email;//email cua hoi vien
     private int namSinh;
-    private int CanCuocCongDan;
+    private String canCuocCongDan;
+    private String trangThai; // Trạng thái tập luyện
+    private String thoiGianCheckIn; // Thời gian check-in
+    private LocalDate ngayTap;
 
+    public int getMaHoiVien() {
+        return maHoiVien;
+    }
 
-    public int getmaHoiVien(){
-    return maHoiVien;}
-    public void setmaHoiVien(int maHoiVien){
-        this.maHoiVien=maHoiVien;
+    public void setMaHoiVien(int maHoiVien) {
+        this.maHoiVien = maHoiVien;
     }
     
      public String getHoTen() {
         return hoTen;
     }
+
     public void setHoTen(String hoTen) {
         this.hoTen = hoTen;
-        
     }
-    public int getNamSinh(){
+
+    public int getNamSinh() {
         return namSinh;
     }
+
+    public void setNamSinh(int namSinh) {
+        this.namSinh = namSinh;
+    }
+
     public int getSdt() {
         return sdt;
     }
+
     public void setSdt(int sdt) {
         this.sdt = sdt;
     }
-    public String getGioiTinh(){
+
+    public String getGioiTinh() {
         return gioiTinh;
         }
-    public void setGioiTinh(String gioiTinh){
-        this.gioiTinh=gioiTinh;
+
+    public void setGioiTinh(String gioiTinh) {
+        this.gioiTinh = gioiTinh;
     }
+
     public String getDiaChi() {
         return diaChi;
     }
+
     public void setDiaChi(String diaChi) {
         this.diaChi = diaChi;
     }
@@ -58,11 +73,44 @@ public class HoiVien {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
         
-    public HoiVien(int maHoiVien, String hoTen, int namSinh, int sdt, String gioiTinh, String diaChi, String email){
+    public String getCanCuocCongDan() {
+        return canCuocCongDan;
+    }
+
+    public void setCanCuocCongDan(String canCuocCongDan) {
+        this.canCuocCongDan = canCuocCongDan;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
+
+    public String getThoiGianCheckIn() {
+        return thoiGianCheckIn;
+    }
+
+    public void setThoiGianCheckIn(String thoiGianCheckIn) {
+        this.thoiGianCheckIn = thoiGianCheckIn;
+    }
+
+    public LocalDate getNgayTap() {
+        return ngayTap;
+    }
+
+    public void setNgayTap(LocalDate ngayTap) {
+        this.ngayTap = ngayTap;
+    }
+
+    public HoiVien(int maHoiVien, String hoTen, int namSinh, int sdt, String gioiTinh, String diaChi, String email, String canCuocCongDan) {
         this.maHoiVien = maHoiVien;
         this.hoTen = hoTen;
         this.namSinh = namSinh;
@@ -70,6 +118,7 @@ public class HoiVien {
         this.gioiTinh = gioiTinh;
         this.diaChi = diaChi;
         this.email = email;
+        this.canCuocCongDan = canCuocCongDan;
            }
     
     public void hienThiTHongTin(){
