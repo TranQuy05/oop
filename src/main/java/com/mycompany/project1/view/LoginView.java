@@ -26,7 +26,7 @@ public class LoginView {
     public void showLoginWindow(Stage stage, Runnable onLoginSuccess) {
         stage.setTitle("Đăng nhập hệ thống");
       
-        Image image = new Image(getClass().getResource("/Anh_nen_login.jpg").toExternalForm());
+        Image image = new Image("file:src/main/resources/Anh_nen_login.png");
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(750);
         imageView.setFitHeight(600);
@@ -84,7 +84,7 @@ public class LoginView {
 
         // Main layout
         StackPane root = new StackPane();
-        root.setPrefSize(600, 600);
+       
         root.getChildren().addAll(imageView, formBox);
         StackPane.setAlignment(formBox, Pos.CENTER);
 
