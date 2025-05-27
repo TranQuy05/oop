@@ -101,9 +101,9 @@ public class TheHoiVienDAO {
             int newCardID = generateNewCardID(the.getType());
             try (PreparedStatement stmt = conn.prepareStatement(queryCard)) {
                 stmt.setInt(1, newCardID);
-                stmt.setString(2, the.getType());
-                stmt.setDouble(3, the.getPrice());
-                stmt.setInt(4, the.getValidDuration());
+            stmt.setString(2, the.getType());
+            stmt.setDouble(3, the.getPrice());
+            stmt.setInt(4, the.getValidDuration());
                 
                 if (stmt.executeUpdate() > 0) {
                     the.setCardID(newCardID);
@@ -348,11 +348,11 @@ public class TheHoiVienDAO {
         return cards;
     }
 
-    public List<GoiDangKy> getMemberSubscriptions(int memberId) {
-        List<GoiDangKy> subscriptions = new ArrayList<>();
+    public ObservableList<GoiDangKy> getMemberSubscriptions(int memberId) {
+        ObservableList<GoiDangKy> subscriptions = FXCollections.observableArrayList();
         String sql = "SELECT s.* FROM Subscription s " +
-                    "JOIN Payment p ON s.SubscriptionID = p.SubscriptionID " +
-                    "WHERE p.MemberID = ?";
+                     "JOIN Payment p ON s.SubscriptionID = p.SubscriptionID " +
+                     "WHERE p.MemberID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, memberId);
             ResultSet rs = stmt.executeQuery();
@@ -428,13 +428,18 @@ public class TheHoiVienDAO {
                     throw new SQLException("Không thể tạo gói đăng ký");
                 }
                 
-                try (ResultSet rs = stmtSubscription.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        subscriptionID = rs.getInt(1);
+                try (ResultSet generatedKeys = stmtSubscription.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        subscriptionID = generatedKeys.getInt(1);
+                        System.out.println("DEBUG: Generated SubscriptionID = " + subscriptionID);
                     } else {
                         throw new SQLException("Không thể lấy ID của gói đăng ký");
                     }
                 }
+            }
+            
+            if (subscriptionID == 0) {
+                throw new SQLException("SubscriptionID không hợp lệ");
             }
             
             // 3. Thêm thanh toán
@@ -544,6 +549,49 @@ public class TheHoiVienDAO {
                 row.put("subscriptionType", rs.getString("SubscriptionType"));
                 row.put("status", rs.getString("Status"));
                 result.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // Lấy số lượng hội viên theo tháng trong 6 tháng gần nhất
+    public Map<String, Integer> getSoHoiVienTheoThang() {
+        Map<String, Integer> result = new HashMap<>();
+        String query = "SELECT MONTH(PaymentDate) as month, COUNT(DISTINCT MemberID) as count " +
+                      "FROM Payment " +
+                      "WHERE PaymentDate >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH) " +
+                      "GROUP BY MONTH(PaymentDate) " +
+                      "ORDER BY month";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                int month = rs.getInt("month");
+                int count = rs.getInt("count");
+                result.put(String.valueOf(month), count);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    // Lấy thống kê số lượng thẻ theo loại đã được thanh toán
+    public Map<String, Integer> getThongKeLoaiThe() {
+        Map<String, Integer> result = new HashMap<>();
+        String query = "SELECT c.Type, COUNT(*) as count " +
+                      "FROM Payment p " +
+                      "JOIN Card c ON p.CardID = c.CardID " +
+                      "GROUP BY c.Type";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                String type = rs.getString("Type");
+                int count = rs.getInt("count");
+                result.put(type, count);
             }
         } catch (SQLException e) {
             e.printStackTrace();

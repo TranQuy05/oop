@@ -75,10 +75,10 @@ public class NhanVienDAO {
             return false;
         }
 
-        // Sau đó thêm vào bảng Receptionist
+        // Sau đó thêm vào bảng Receptionist với StaffID là UserID vừa được tạo
         String sql = "INSERT INTO Receptionist (StaffID, StartWorkingDate) VALUES (?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, nv.getStaffID());
+            stmt.setInt(1, nv.getUser().getUserID()); // Sử dụng UserID đã được tự động tăng
             stmt.setString(2, nv.getStartWorkingDate());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

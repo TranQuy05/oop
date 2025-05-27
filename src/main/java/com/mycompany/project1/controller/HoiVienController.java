@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.sql.Connection;
+import com.mycompany.project1.utils.utils;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -117,6 +119,7 @@ public class HoiVienController {
         try {
             // Kiểm tra họ tên
             if (hoTen == null || hoTen.trim().isEmpty()) {
+                utils.showAlert("Lỗi", "Họ tên không được để trống!", Alert.AlertType.ERROR);
                 System.out.println("Họ tên không được để trống!");
                 return false;
             }
@@ -130,59 +133,70 @@ public class HoiVienController {
                 int year = Integer.parseInt(namSinh);
                 int currentYear = java.time.Year.now().getValue();
                 if (year < 1900 || year > currentYear) {
-                    System.out.println("Năm sinh không hợp lệ!");
+                    utils.showAlert("Lỗi", "Năm sinh không hợp lệ!", Alert.AlertType.ERROR);
+                    //System.out.println("Năm sinh không hợp lệ!");
                     return false;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Năm sinh phải là số!");
+                utils.showAlert("Lỗi", "Năm sinh phải là số!", Alert.AlertType.ERROR);
+                //System.out.println("Năm sinh phải là số!");
                 return false;
             }
             
             // Kiểm tra số điện thoại
             if (sdt == null || sdt.trim().isEmpty()) {
-                System.out.println("Số điện thoại không được để trống!");
+                utils.showAlert("Lỗi", "Số điện thoại không được để trống!", Alert.AlertType.ERROR);
+                //System.out.println("Số điện thoại không được để trống!"); 
                 return false;
             }
             try {
                 long phone = Long.parseLong(sdt);
                 if (phone < 0) {
-                    System.out.println("Số điện thoại không hợp lệ!");
+                    utils.showAlert("Lỗi", "Số điện thoại không hợp lệ!", Alert.AlertType.ERROR);
+                    //System.out.println("Số điện thoại không hợp lệ!");
                     return false;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Số điện thoại phải là số!");
+                utils.showAlert("Lỗi", "Số điện thoại phải là số!", Alert.AlertType.ERROR);
+                //System.out.println("Số điện thoại phải là số!");
                 return false;
             }
             
             // Kiểm tra giới tính
             if (gioiTinh == null || gioiTinh.trim().isEmpty()) {
-                System.out.println("Giới tính không được để trống!");
+                utils.showAlert("Lỗi", "Giới tính không được để trống!", Alert.AlertType.ERROR);
+                //System.out.println("Giới tính không được để trống!");
                 return false;
             }
             
             // Kiểm tra địa chỉ
             if (diaChi == null || diaChi.trim().isEmpty()) {
-                System.out.println("Địa chỉ không được để trống!");
+                utils.showAlert("Lỗi", "Địa chỉ không được để trống!", Alert.AlertType.ERROR);
+                //System.out.println("Địa chỉ không được để trống!");
                 return false;
             }
             
             // Kiểm tra email
             if (email == null || email.trim().isEmpty()) {
-                System.out.println("Email không được để trống!");
+                utils.showAlert("Lỗi", "Email không được để trống!", Alert.AlertType.ERROR);
+                //System.out.println("Email không được để trống!");
                 return false;
             }
             if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-                System.out.println("Email không đúng định dạng!");
+                utils.showAlert("Lỗi", "Email không đúng định dạng!", Alert.AlertType.ERROR);
+                //System.out.println("Email không đúng định dạng!");
                 return false;
             }
 
             // Kiểm tra căn cước công dân
             if (canCuocCongDan == null || canCuocCongDan.trim().isEmpty()) {
-                System.out.println("Căn cước công dân không được để trống!");
+                utils.showAlert("Lỗi", "Căn cước công dân không được để trống!", Alert.AlertType.ERROR);
+                //System.out.println("Căn cước công dân không được để trống!");
                 return false;
             }
             if (!canCuocCongDan.matches("\\d{9,12}")) {
-                System.out.println("Căn cước công dân phải có 9-12 chữ số!");
+                utils.showAlert("Lỗi", "Căn cước công dân phải có 9-12 chữ số!", Alert.AlertType.ERROR);
+                //System.out.println("Căn cước công dân phải có 9-12 chữ số!");
                 return false;
             }
             

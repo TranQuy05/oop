@@ -17,6 +17,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -29,6 +30,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  *
@@ -44,7 +46,7 @@ public class mainPage {
         this.theHoiVienController = new TheHoiVienController();
     }
 
-    public Node showMainPage() {
+    public Parent showMainPage() {
         VBox mainContainer = new VBox(30);
         mainContainer.setPadding(new Insets(20));
 
@@ -56,14 +58,13 @@ public class mainPage {
         // Thẻ thông tin: Tổng số hội viên
         VBox hvBox = createInfoCard("Tổng hội viên", String.valueOf(hoiVienController.getTongSoHoiVien()));
         VBox khoaBox = createInfoCard("Gói tập hiện có", String.valueOf(theHoiVienController.getTongSoGoiTap()));
-        VBox doanhThuBox = createInfoCard("Doanh thu tháng", "50,000,000đ");
         
         // Thẻ xác thực hội viên với nút click
         VBox xacThuc = createInfoCard("Xác thực hội viên", "Click để xác thực");
         xacThuc.setOnMouseClicked(e -> showVerificationDialog());
 
         // Add all cards to the horizontal container
-        cardsContainer.getChildren().addAll(hvBox, khoaBox, doanhThuBox, xacThuc);
+        cardsContainer.getChildren().addAll(hvBox, khoaBox, xacThuc);
 
         // Create a container for charts
         VBox chartsContainer = new VBox(30);
@@ -84,56 +85,41 @@ public class mainPage {
 
         XYChart.Series<String, Number> barData = new XYChart.Series<>();
         barData.setName("Khách hàng");
-        barData.getData().add(new XYChart.Data<>("1", 50));
-        barData.getData().add(new XYChart.Data<>("2", 60));
-        barData.getData().add(new XYChart.Data<>("3", 45));
-        barData.getData().add(new XYChart.Data<>("4", 70));
-        barData.getData().add(new XYChart.Data<>("5", 80));
-        barData.getData().add(new XYChart.Data<>("6", 90));
+
+        // Lấy dữ liệu từ database 
+        TheHoiVienDAO theHoiVienDAO = new TheHoiVienDAO();
+        Map<String, Integer> soHoiVienTheoThang = theHoiVienDAO.getSoHoiVienTheoThang();
+        
+        // Thêm dữ liệu vào biểu đồ
+        for (Map.Entry<String, Integer> entry : soHoiVienTheoThang.entrySet()) {
+            barData.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
 
         barChart.getData().add(barData);
         HBox.setHgrow(barChart, Priority.ALWAYS);
         barChart.setPrefHeight(300);
-
-        // Biểu đồ đường: doanh thu trong 6 tháng
-        NumberAxis yLineAxis = new NumberAxis();
-        LineChart<String, Number> lineChart = new LineChart<>(new CategoryAxis(), yLineAxis);
-        lineChart.setTitle("Doanh thu 6 tháng gần nhất");
-        yLineAxis.setLabel("Doanh thu (triệu VNĐ)");
-
-        XYChart.Series<String, Number> lineData = new XYChart.Series<>();
-        lineData.setName("Doanh thu");
-        lineData.getData().add(new XYChart.Data<>("1", 100));
-        lineData.getData().add(new XYChart.Data<>("2", 120));
-        lineData.getData().add(new XYChart.Data<>("3", 90));
-        lineData.getData().add(new XYChart.Data<>("4", 130));
-        lineData.getData().add(new XYChart.Data<>("5", 150));
-        lineData.getData().add(new XYChart.Data<>("6", 160));
-
-        lineChart.getData().add(lineData);
-        HBox.setHgrow(lineChart, Priority.ALWAYS);
-        lineChart.setPrefHeight(300);
-
-        topCharts.getChildren().addAll(barChart, lineChart);
+        barChart.setPrefWidth(400);
 
         // Biểu đồ tròn: các loại thẻ tập
-        ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList(
-            new PieChart.Data("Thẻ tháng", 40),
-            new PieChart.Data("Thẻ quý", 30),
-            new PieChart.Data("Thẻ năm", 30)
-        );
+        ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
+        
+        // Lấy dữ liệu từ database
+        Map<String, Integer> thongKeLoaiThe = theHoiVienDAO.getThongKeLoaiThe();
+        
+        // Thêm dữ liệu vào biểu đồ
+        for (Map.Entry<String, Integer> entry : thongKeLoaiThe.entrySet()) {
+            pieData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+        }
+        
         PieChart pieChart = new PieChart(pieData);
         pieChart.setTitle("Tỉ lệ loại thẻ tập đã bán");
-        pieChart.setPrefSize(400, 400);
+        pieChart.setPrefSize(400, 300);
 
-        // Create a container for the pie chart aligned to the left
-        HBox pieContainer = new HBox();
-        pieContainer.setAlignment(Pos.CENTER_LEFT);
-        pieContainer.setPadding(new Insets(20, 0, 0, 20));
-        pieContainer.getChildren().add(pieChart);
+        // Add both charts to the top row
+        topCharts.getChildren().addAll(barChart, pieChart);
 
         // Add all components to the main container
-        mainContainer.getChildren().addAll(cardsContainer, topCharts, pieContainer);
+        mainContainer.getChildren().addAll(cardsContainer, topCharts);
 
         ScrollPane scrollPane = new ScrollPane(mainContainer);
         scrollPane.setFitToWidth(true);
@@ -241,21 +227,13 @@ public class mainPage {
         paymentTab.setContent(createPaymentHistoryTab(maHoiVien));
         paymentTab.setClosable(false);
 
-        // Thêm nút đăng ký thẻ và gói tập
-        HBox buttonContainer = new HBox(10);
-        buttonContainer.setAlignment(Pos.CENTER);
-        buttonContainer.setPadding(new Insets(10));
+        // Thêm tất cả tab vào TabPane
+        tabPane.getTabs().addAll(personalInfoTab, membershipTab, subscriptionTab, paymentTab);
 
-        Button registerCardBtn = new Button("Đăng ký thẻ mới");
-        registerCardBtn.setOnAction(e -> showRegisterCardDialog(maHoiVien));
-
-        Button registerSubscriptionBtn = new Button("Đăng ký gói tập");
-        registerSubscriptionBtn.setOnAction(e -> showRegisterSubscriptionDialog(maHoiVien));
-
-        buttonContainer.getChildren().addAll(registerCardBtn, registerSubscriptionBtn);
-
+        // Tạo container chính
         VBox mainContainer = new VBox(10);
-        mainContainer.getChildren().addAll(tabPane, buttonContainer);
+        mainContainer.setPadding(new Insets(10));
+        mainContainer.getChildren().add(tabPane);
 
         Scene scene = new Scene(mainContainer, 800, 600);
         detailsStage.setScene(scene);
@@ -319,7 +297,7 @@ public class mainPage {
         TableView<GoiDangKy> tableView = new TableView<>();
         
         TableColumn<GoiDangKy, String> tenGoiCol = new TableColumn<>("Tên gói");
-        tenGoiCol.setCellValueFactory(new PropertyValueFactory<>("subscriptionName"));
+        tenGoiCol.setCellValueFactory(new PropertyValueFactory<>("subName"));
         
         TableColumn<GoiDangKy, String> loaiGoiCol = new TableColumn<>("Loại gói");
         loaiGoiCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -328,14 +306,14 @@ public class mainPage {
         ngayBatDauCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
         
         TableColumn<GoiDangKy, String> chiTietCol = new TableColumn<>("Chi tiết");
-        chiTietCol.setCellValueFactory(new PropertyValueFactory<>("details"));
+        chiTietCol.setCellValueFactory(new PropertyValueFactory<>("subscriptionDetail"));
         
         TableColumn<GoiDangKy, String> trangThaiCol = new TableColumn<>("Trạng thái");
         trangThaiCol.setCellValueFactory(new PropertyValueFactory<>("status"));
         
         tableView.getColumns().addAll(tenGoiCol, loaiGoiCol, ngayBatDauCol, chiTietCol, trangThaiCol);
         
-        // Load data from DAO
+        // lấy dữ liệu từ DAO
         TheHoiVienDAO theHoiVienDAO = new TheHoiVienDAO();
         tableView.setItems(FXCollections.observableArrayList(theHoiVienDAO.getMemberSubscriptions(maHoiVien)));
         
@@ -358,7 +336,7 @@ public class mainPage {
         ngayThanhToanCol.setCellValueFactory(new PropertyValueFactory<>("paymentDate"));
         
         TableColumn<Payment, String> hinhThucCol = new TableColumn<>("Hình thức");
-        hinhThucCol.setCellValueFactory(new PropertyValueFactory<>("paymentType"));
+        hinhThucCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         
         tableView.getColumns().addAll(maThanhToanCol, tenGoiCol, loaiTheCol, ngayThanhToanCol, hinhThucCol);
         
@@ -367,133 +345,5 @@ public class mainPage {
         tableView.setItems(FXCollections.observableArrayList(theHoiVienDAO.getMemberPayments(maHoiVien)));
         
         return tableView;
-    }
-
-    private void showRegisterCardDialog(int memberID) {
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Đăng ký thẻ mới");
-        dialog.setHeaderText("Chọn loại thẻ và phương thức thanh toán");
-
-        // Set the button types
-        ButtonType registerButtonType = new ButtonType("Đăng ký", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(registerButtonType, ButtonType.CANCEL);
-
-        // Create the custom content
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-
-        ComboBox<String> cardTypeCombo = new ComboBox<>();
-        TheHoiVienDAO theHoiVienDAO = new TheHoiVienDAO();
-        cardTypeCombo.setItems(theHoiVienDAO.getCardTypes());
-
-        ComboBox<String> paymentTypeCombo = new ComboBox<>();
-        paymentTypeCombo.getItems().addAll("Cash", "Credit Card", "Online");
-
-        grid.add(new Label("Loại thẻ:"), 0, 0);
-        grid.add(cardTypeCombo, 1, 0);
-        grid.add(new Label("Phương thức thanh toán:"), 0, 1);
-        grid.add(paymentTypeCombo, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-
-        // Convert the result to a registration when the register button is clicked
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == registerButtonType) {
-                if (cardTypeCombo.getValue() == null || paymentTypeCombo.getValue() == null) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Lỗi");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Vui lòng chọn đầy đủ thông tin!");
-                    alert.showAndWait();
-                    return null;
-                }
-
-                TheHoiVien selectedCard = theHoiVienDAO.layTheTheoLoai(cardTypeCombo.getValue());
-                if (selectedCard != null) {
-                    boolean success = theHoiVienDAO.dangKyTheTap(memberID, selectedCard.getCardID(), paymentTypeCombo.getValue());
-                    if (success) {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Thành công");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Đăng ký thẻ thành công!");
-                        alert.showAndWait();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Lỗi");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Đăng ký thẻ thất bại!");
-                        alert.showAndWait();
-                    }
-                }
-            }
-            return null;
-        });
-
-        dialog.showAndWait();
-    }
-
-    private void showRegisterSubscriptionDialog(int memberID) {
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Đăng ký gói tập");
-        dialog.setHeaderText("Chọn gói tập và phương thức thanh toán");
-
-        // Set the button types
-        ButtonType registerButtonType = new ButtonType("Đăng ký", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(registerButtonType, ButtonType.CANCEL);
-
-        // Create the custom content
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-
-        ComboBox<GoiDangKy> subscriptionCombo = new ComboBox<>();
-        TheHoiVienDAO theHoiVienDAO = new TheHoiVienDAO();
-        subscriptionCombo.setItems(FXCollections.observableArrayList(theHoiVienDAO.getAllSubscriptions()));
-
-        ComboBox<String> paymentTypeCombo = new ComboBox<>();
-        paymentTypeCombo.getItems().addAll("Cash", "Credit Card", "Online");
-
-        grid.add(new Label("Gói tập:"), 0, 0);
-        grid.add(subscriptionCombo, 1, 0);
-        grid.add(new Label("Phương thức thanh toán:"), 0, 1);
-        grid.add(paymentTypeCombo, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-
-        // Convert the result to a registration when the register button is clicked
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == registerButtonType) {
-                if (subscriptionCombo.getValue() == null || paymentTypeCombo.getValue() == null) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Lỗi");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Vui lòng chọn đầy đủ thông tin!");
-                    alert.showAndWait();
-                    return null;
-                }
-
-                GoiDangKy selectedSubscription = subscriptionCombo.getValue();
-                boolean success = theHoiVienDAO.themGoiDangKy(memberID, selectedSubscription);
-                if (success) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Thành công");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Đăng ký gói tập thành công!");
-                    alert.showAndWait();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Lỗi");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Đăng ký gói tập thất bại!");
-                    alert.showAndWait();
-                }
-            }
-            return null;
-        });
-
-        dialog.showAndWait();
     }
 }

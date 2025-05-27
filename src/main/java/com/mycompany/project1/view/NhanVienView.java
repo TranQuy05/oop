@@ -19,6 +19,7 @@ import javafx.geometry.Pos;
 import com.mycompany.project1.model.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Alert;
 
 public class NhanVienView {
     private BorderPane root;
@@ -77,7 +78,6 @@ public class NhanVienView {
                                 colGioiTinh, colDiaChi, colSDT, colCCCD);
 
         // Tạo form nhập thông tin nhân viên
-        TextField tfMa = new TextField(); tfMa.setPromptText("Mã nhân viên");
         TextField tfTen = new TextField(); tfTen.setPromptText("Họ tên");
         TextField tfEmail = new TextField(); tfEmail.setPromptText("Email");
         TextField tfPassword = new TextField(); tfPassword.setPromptText("Mật khẩu");
@@ -88,7 +88,7 @@ public class NhanVienView {
         TextField tfSDT = new TextField(); tfSDT.setPromptText("Số điện thoại");
         TextField tfCCCD = new TextField(); tfCCCD.setPromptText("CCCD");
 
-        HBox form = new HBox(10, tfMa, tfTen, tfEmail, tfPassword, tfRole, 
+        HBox form = new HBox(10, tfTen, tfEmail, tfPassword, tfRole, 
                            tfNamSinh, tfGioiTinh, tfDiaChi, tfSDT, tfCCCD);
         form.setAlignment(Pos.CENTER);
         
@@ -110,7 +110,6 @@ public class NhanVienView {
         Button btnLuu = new Button("Lưu thông tin");
         btnLuu.setOnAction(e -> {
             try {
-                int maNV = Integer.parseInt(tfMa.getText());
                 String hoTen = tfTen.getText();
                 String email = tfEmail.getText();
                 String password = tfPassword.getText();
@@ -118,15 +117,14 @@ public class NhanVienView {
                 int namSinh = Integer.parseInt(tfNamSinh.getText());
                 String gioiTinh = tfGioiTinh.getText();
                 String diaChi = tfDiaChi.getText();
-                int sdt = Integer.parseInt(tfSDT.getText());
-                int cccd = Integer.parseInt(tfCCCD.getText());
+                String sdt = tfSDT.getText();
+                String cccd = tfCCCD.getText();
 
-                User user = new User(maNV, hoTen, email, password, role, namSinh, gioiTinh, diaChi, String.valueOf(sdt), String.valueOf(cccd));
-                NhanVien nhanVienMoi = new NhanVien(maNV, "2024-01-01", user);
+                User user = new User(0, hoTen, email, password, role, namSinh, gioiTinh, diaChi, sdt, cccd);
+                NhanVien nhanVienMoi = new NhanVien(0, "2024-01-01", user);
 
                 if (controller.themNhanVien(nhanVienMoi)) {
                     // Clear form fields
-                    tfMa.clear();
                     tfTen.clear();
                     tfEmail.clear();
                     tfPassword.clear();
@@ -136,16 +134,37 @@ public class NhanVienView {
                     tfDiaChi.clear();
                     tfSDT.clear();
                     tfCCCD.clear();
+                    
                     // Hide form after adding
                     container.getChildren().remove(formSection);
                     btnThem.setText("➕ Thêm nhân viên");
+                    
+                    // Hiển thị alert thành công với mã nhân viên mới
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Thành công");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Thêm nhân viên thành công!\nMã nhân viên mới: " + nhanVienMoi.getUser().getUserID());
+                    alert.showAndWait();
+                    
+                    // Refresh table để hiển thị nhân viên mới
+                    table.setItems(controller.getDanhSachNhanVien());
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Lỗi");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Thêm nhân viên thất bại! Vui lòng kiểm tra lại thông tin.");
+                    alert.showAndWait();
                 }
             } catch (NumberFormatException ex) {
-                System.out.println("Vui lòng nhập đúng định dạng số cho mã nhân viên, năm sinh, số điện thoại và CCCD");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Vui lòng nhập đúng định dạng số cho năm sinh");
+                alert.showAndWait();
             }
         });
 
-        // Add save button to form
+        
         form.getChildren().add(btnLuu);
         
         TextField tfSearch = new TextField();

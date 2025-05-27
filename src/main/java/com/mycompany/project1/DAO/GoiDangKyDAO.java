@@ -19,7 +19,7 @@ public class GoiDangKyDAO {
             e.printStackTrace();
         }
     }
-    
+    // lấy tát cả gói đăng ký từ dâtbase
     public ObservableList<GoiDangKy> getAllGoiDangKy() {
         ObservableList<GoiDangKy> danhSach = FXCollections.observableArrayList();
         String sql = "SELECT * FROM Subscription ORDER BY SubscriptionID";
@@ -44,7 +44,7 @@ public class GoiDangKyDAO {
         }
         return danhSach;
     }
-    
+    // thêm gói đăng ký mới
     public boolean themGoiDangKy(GoiDangKy goi) {
         String sql = "INSERT INTO Subscription (SubName, Type, StartDate, SubscriptionDetail, Status) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
@@ -61,14 +61,13 @@ public class GoiDangKyDAO {
             return false;
         }
     }
-    
+    // hàm cập nhật gói đăng ký 
     public boolean capNhatGoiDangKy(GoiDangKy goi) {
         String sql = "UPDATE Subscription SET SubName = ?, Type = ?,  " +
                     "StartDate = ?, SubscriptionDetail = ?, Status = ? WHERE SubscriptionID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, goi.getSubName());
             stmt.setString(2, goi.getType());
-          
             stmt.setDate(4, java.sql.Date.valueOf(goi.getStartDate()));
             stmt.setString(5, goi.getSubscriptionDetail());
             stmt.setString(6, goi.getStatus());
@@ -79,7 +78,7 @@ public class GoiDangKyDAO {
             return false;
         }
     }
-    
+    // hàm xóa gói đăng ký 
     public boolean xoaGoiDangKy(int subscriptionID) {
         String sql = "DELETE FROM Subscription WHERE SubscriptionID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -90,7 +89,7 @@ public class GoiDangKyDAO {
             return false;
         }
     }
-    
+    // hàm tìm gói đăng ký theo mã 
     public GoiDangKy timGoiDangKyTheoMa(int subscriptionID) {
         String sql = "SELECT * FROM Subscription WHERE SubscriptionID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

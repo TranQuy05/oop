@@ -23,6 +23,14 @@ public class User {
     public User() {
     }
     
+    public User(int userID, String username, String password, String role, String fullName, String email) {
+        this.UserID = userID;
+        this.UserName = username;
+        this.Password = password;
+        this.Role = role;
+        this.Email = email;
+    }
+    
     public User(int userID, String UserName, String Email, String Password, String Role,int UserYoB, String Gender, String Address, String PhoneNum, String CitizenIdenNumb ){
         this.UserID = userID;
         this.UserName = UserName;
@@ -106,13 +114,8 @@ public class User {
         this.PhoneNum = phoneNum;
     }
 
-    public String getCitizenIdenNumb() {
-        return CitizenIdenNumb;
-    }
-
-    public void setCitizenIdenNumb(String citizenIdenNumb) {
-        this.CitizenIdenNumb = citizenIdenNumb;
-    }
+  
+    
 
     public String getUserEmail() {
         return Email;
@@ -126,8 +129,8 @@ public class User {
         return CitizenIdenNumb;
     }
 
-    public void setCitizenIdentification(String citizenIdentification) {
-        this.CitizenIdenNumb = citizenIdentification;
+    public void setCitizenIdentification(String citizenIdenNumb) {
+        this.CitizenIdenNumb = citizenIdenNumb;
     }
 }
 

@@ -10,6 +10,7 @@ import com.mycompany.project1.view.QuanLyTheView;
 import com.mycompany.project1.view.PaymentHistoryView;
 import com.mycompany.project1.view.GoiDangKyView;
 
+
 import com.mycompany.project1.view.mainPage;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -32,6 +33,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import com.mycompany.project1.model.User;
 
 public class App extends Application {
     private BorderPane root;
@@ -44,7 +46,7 @@ public class App extends Application {
 
             LoginView loginView = new LoginView();
        
-        loginView.showLogin(primaryStage, () -> {showMainApp(primaryStage);
+        loginView.showLoginWindow(primaryStage, () -> {showMainApp(primaryStage);
                 
                 });
         
@@ -98,9 +100,8 @@ public class App extends Application {
         bottomMenu.setAlignment(Pos.BOTTOM_LEFT);
         Button btnLogOut = createMenuButton("Đăng xuất");
         btnLogOut.setMaxWidth(Double.MAX_VALUE);
-        Button btnSetInfor = createMenuButton("Thay đổi thông tin");
-        btnSetInfor.setMaxWidth(Double.MAX_VALUE);
-        bottomMenu.getChildren().addAll(btnLogOut, btnSetInfor);
+        
+        bottomMenu.getChildren().addAll(btnLogOut);
 
         // Thêm xử lý sự kiện đăng xuất
         btnLogOut.setOnAction(e -> {
@@ -112,10 +113,13 @@ public class App extends Application {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     LoginView loginView = new LoginView();
-                    loginView.showLogin(stage, () -> showMainApp(stage));
+                    loginView.showLoginWindow(stage, () -> showMainApp(stage));
                 }
             });
         });
+
+        // Trong phần xử lý nút "Thay đổi thông tin"
+    
 
         BorderPane leftPane = new BorderPane();
         leftPane.setTop(mainMenu);

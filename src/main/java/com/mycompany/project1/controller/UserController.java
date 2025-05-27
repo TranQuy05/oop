@@ -31,7 +31,7 @@ public class UserController {
         return dao.xoaUser(userID);
     }
 
-    public User dangNhap(String email, String password) {
-        return dao.dangNhap(email, password);
+    public User login(String email, String password) {
+        return dao.login(email, password);
     }
 } 

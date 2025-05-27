@@ -5,39 +5,100 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import com.mycompany.project1.model.User;
 
 public class LoginView {
-    private LoginController controller = new LoginController();
+    private LoginController controller;
+    private static User currentUser;
+    
+    public LoginView() {
+        this.controller = new LoginController();
+    }
 
-    public void showLogin(Stage stage, Runnable onLoginSuccess) {
-        Label lblUser = new Label("Tài khoản:");
-        TextField txtUser = new TextField();
-        Label lblPass = new Label("Mật khẩu:");
-        PasswordField txtPass = new PasswordField();
+    public void showLoginWindow(Stage stage, Runnable onLoginSuccess) {
+        stage.setTitle("Đăng nhập hệ thống");
+      
+        Image image = new Image(getClass().getResource("/Anh_nen_login.jpg").toExternalForm());
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(750);
+        imageView.setFitHeight(600);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+     
+ 
+       
+        // Right: Login form
+        VBox formBox = new VBox(15);
+        formBox.setAlignment(Pos.CENTER);
+        formBox.setPadding(new Insets(30, 30, 30, 30));
+        formBox.setPrefWidth(200);
+        formBox.setStyle("-fx-background-color: #fff;");
 
-        Button btnLogin = new Button("Đăng nhập");
-        Label lblStatus = new Label();
+        Label title = new Label("Đăng nhập");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 22));
 
-        btnLogin.setOnAction(e -> {
-            String user = txtUser.getText();
-            String pass = txtPass.getText();
-            if (controller.authenticate(user, pass)) {
-                onLoginSuccess.run(); // Gọi khi đăng nhập thành công
+        TextField userTextField = new TextField();
+        userTextField.setPromptText("Tên đăng nhập");
+        userTextField.setStyle("-fx-background-color: #e0e0e0; -fx-background-radius: 8; -fx-border-radius: 8; -fx-padding: 8 12;");
+
+        PasswordField pwBox = new PasswordField();
+        pwBox.setPromptText("Mật khẩu");
+        pwBox.setStyle("-fx-background-color: #e0e0e0; -fx-background-radius: 8; -fx-border-radius: 8; -fx-padding: 8 12;");
+
+        Button btn = new Button("Đăng nhập");
+        btn.setPrefWidth(120);
+        btn.setStyle("-fx-background-color: #111; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 15px;");
+        btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 15px;"));
+        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: #111; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 15px;"));
+
+        Label actiontarget = new Label();
+        actiontarget.setTextFill(javafx.scene.paint.Color.RED);
+        actiontarget.setFont(Font.font(13));
+
+        btn.setOnAction(e -> {
+            String username = userTextField.getText();
+            String password = pwBox.getText();
+            if (username.isEmpty() || password.isEmpty()) {
+                actiontarget.setText("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+            if (controller.authenticate(username, password)) {
+                actiontarget.setText("");
+                User user = controller.getUser();
+                handleSuccessfulLogin(user);
+                onLoginSuccess.run();
             } else {
-                lblStatus.setText("Sai tài khoản hoặc mật khẩu");
+                actiontarget.setText("Tên đăng nhập hoặc mật khẩu không đúng!");
             }
         });
 
-        VBox loginBox = new VBox(10, lblUser, txtUser, lblPass, txtPass, btnLogin, lblStatus);
-        loginBox.setPadding(new Insets(20));
-        loginBox.setAlignment(Pos.CENTER);
-        
-            
-        Scene scene = new Scene(loginBox, 400, 300);
+        formBox.getChildren().addAll(title, userTextField, pwBox, btn, actiontarget);
+
+        // Main layout
+        StackPane root = new StackPane();
+        root.setPrefSize(600, 600);
+        root.getChildren().addAll(imageView, formBox);
+        StackPane.setAlignment(formBox, Pos.CENTER);
+
+        Scene scene = new Scene(root, 850, 750);
         stage.setScene(scene);
-        stage.setTitle("Đăng nhập");
         stage.show();
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    private void handleSuccessfulLogin(User user) {
+        currentUser = user;
+        
     }
 }

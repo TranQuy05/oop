@@ -171,20 +171,22 @@ public class HoiVienView {
                 loadData();
             }
         });
-
+        // Xử lý sự kiện chọn hội viện trong table view
+        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                tfTen.setText(newSelection.getHoTen());
+                tfNamSinh.setText(String.valueOf(newSelection.getNamSinh()));
+                tfSdt.setText(String.valueOf(newSelection.getSdt()));
+                tfGioiTinh.setText(newSelection.getGioiTinh());
+                tfDiaChi.setText(newSelection.getDiaChi());
+                tfEmail.setText(newSelection.getEmail());
+                tfCanCuocCongDan.setText(newSelection.getCanCuocCongDan());
+            }
+        });
         // Xử lý sự kiện sửa thông tin
         btnSua.setOnAction(e -> {
             HoiVien selectedHoiVien = table.getSelectionModel().getSelectedItem();
             if (selectedHoiVien != null) {
-                // Điền thông tin vào form
-                tfTen.setText(selectedHoiVien.getHoTen());
-                tfNamSinh.setText(String.valueOf(selectedHoiVien.getNamSinh()));
-                tfSdt.setText(String.valueOf(selectedHoiVien.getSdt()));
-                tfGioiTinh.setText(selectedHoiVien.getGioiTinh());
-                tfDiaChi.setText(selectedHoiVien.getDiaChi());
-                tfEmail.setText(selectedHoiVien.getEmail());
-                tfCanCuocCongDan.setText(selectedHoiVien.getCanCuocCongDan());
-
                 // Cập nhật thông tin
                 if (validateAndUpdate(selectedHoiVien.getMaHoiVien())) {
                     clearInputFields();

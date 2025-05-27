@@ -32,7 +32,7 @@ public class HoiVienDAO {
         String query = "SELECT * FROM Member";
         
         try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+            ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {
                 HoiVien hoiVien = new HoiVien(

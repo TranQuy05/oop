@@ -52,7 +52,9 @@ public class PaymentDAO {
             stmt.setInt(3, payment.getCardID());
             stmt.setDate(4, java.sql.Date.valueOf(payment.getPaymentDate()));
             stmt.setString(5, payment.getType());
+            System.out.println("DEBUG: SubscriptionID = " + payment.getSubscriptionID());
             return stmt.executeUpdate() > 0;
+            
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

@@ -33,7 +33,13 @@ public class QuanLyTheView {
         this.root = root;
         this.theHoiVienDAO = new TheHoiVienDAO();
     }
-
+        private void showAlert(String title, String content, Alert.AlertType type) {
+            Alert alert = new Alert(type);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(content);
+            alert.showAndWait();
+    }
     public Node showQuanLyThe() {
         VBox container = new VBox(20);
         container.setPadding(new Insets(20));
@@ -198,8 +204,7 @@ public class QuanLyTheView {
                     payment.setCardID(the.getCardID());
                     payment.setPaymentDate(LocalDate.now());
                     payment.setType("Thanh toán thẻ " + the.getType());
-     //               payment.setAmount(the.getPrice());
-       //             payment.setStatus("Completed");
+                    payment.setSubscriptionID(goi.getSubscriptionID());
                     
                     PaymentDAO paymentDAO = new PaymentDAO();
                     if (paymentDAO.themPayment(payment)) {
@@ -209,6 +214,9 @@ public class QuanLyTheView {
                         tableGoi.setItems(theHoiVienDAO.getAllSubscriptions());
                         // Reset form
                         resetForm();
+
+                        // GỌI THÊM DÒNG NÀY:
+                        showMemberSubscriptions(memberID);
                     }
                 } else {
                     showAlert("Lỗi", "Không thể đăng ký thẻ và gói tập!", Alert.AlertType.ERROR);
@@ -231,13 +239,7 @@ public class QuanLyTheView {
         tfMaGoi.clear();
     }
 
-    private void showAlert(String title, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
 
     private void handleDangKy() {
         try {
@@ -273,5 +275,26 @@ public class QuanLyTheView {
         } catch (NumberFormatException e) {
             showAlert("Lỗi", "Vui lòng nhập đúng định dạng số!", Alert.AlertType.ERROR);
         }
+    }
+// sau khi đăng ký thành công hiển thị danh sách gói tập của hội viên đã đăng ký
+    private void showMemberSubscriptions(int memberID) {
+        // Lấy danh sách gói tập của hội viên từ DAO
+        ObservableList<GoiDangKy> subscriptions = theHoiVienDAO.getMemberSubscriptions(memberID);
+
+        // Tạo nội dung hiển thị
+        StringBuilder sb = new StringBuilder();
+        sb.append("Mã hội viên: ").append(memberID).append("\n");
+        sb.append("Các gói tập đã đăng ký:\n");
+        for (GoiDangKy goi : subscriptions) {
+            sb.append("- ").append(goi.getSubName())
+              .append(" (").append(goi.getType()).append(")\n");
+        }
+
+        // Hiển thị Alert
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông tin hội viên");
+        alert.setHeaderText("Đăng ký thành công!");
+        alert.setContentText(sb.toString());
+        alert.showAndWait();
     }
 } 

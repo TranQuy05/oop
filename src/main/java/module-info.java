@@ -1,7 +1,9 @@
 module com.mycompany.project1 {
+    requires java.sql;
     requires javafx.controls;
     requires javafx.fxml;
 
-    opens com.mycompany.project1 to javafx.fxml;
     exports com.mycompany.project1;
+    exports com.mycompany.project1.DAO;
+    exports com.mycompany.project1.model;
 }
