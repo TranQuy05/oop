@@ -46,16 +46,26 @@ public class GoiDangKyDAO {
     }
     // thêm gói đăng ký mới
     public boolean themGoiDangKy(GoiDangKy goi) {
-        String sql = "INSERT INTO Subscription (SubName, Type, StartDate, SubscriptionDetail, Status) " +
+        // Lấy mã gói cuối cùng và tăng thêm 1
+        int lastID = getLastSubscriptionID();
+        int newID = lastID + 1;
+        
+        String sql = "INSERT INTO Subscription (SubscriptionID, SubName, Type, StartDate, SubscriptionDetail, Status) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, goi.getSubName());
-            stmt.setString(2, goi.getType());
-          
+            stmt.setInt(1, newID);
+            stmt.setString(2, goi.getSubName());
+            stmt.setString(3, goi.getType());
             stmt.setDate(4, java.sql.Date.valueOf(goi.getStartDate()));
             stmt.setString(5, goi.getSubscriptionDetail());
             stmt.setString(6, goi.getStatus());
-            return stmt.executeUpdate() > 0;
+            
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                goi.setSubscriptionID(newID); // Cập nhật mã gói mới cho đối tượng
+                return true;
+            }
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -63,15 +73,15 @@ public class GoiDangKyDAO {
     }
     // hàm cập nhật gói đăng ký 
     public boolean capNhatGoiDangKy(GoiDangKy goi) {
-        String sql = "UPDATE Subscription SET SubName = ?, Type = ?,  " +
+        String sql = "UPDATE Subscription SET SubName = ?, Type = ?, " +
                     "StartDate = ?, SubscriptionDetail = ?, Status = ? WHERE SubscriptionID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, goi.getSubName());
             stmt.setString(2, goi.getType());
-            stmt.setDate(4, java.sql.Date.valueOf(goi.getStartDate()));
-            stmt.setString(5, goi.getSubscriptionDetail());
-            stmt.setString(6, goi.getStatus());
-            stmt.setInt(7, goi.getSubscriptionID());
+            stmt.setDate(3, java.sql.Date.valueOf(goi.getStartDate()));
+            stmt.setString(4, goi.getSubscriptionDetail());
+            stmt.setString(5, goi.getStatus());
+            stmt.setInt(6, goi.getSubscriptionID());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,5 +120,18 @@ public class GoiDangKyDAO {
             e.printStackTrace();
         }
         return null;
+    }
+    // Thêm phương thức này vào GoiDangKyDAO.java
+    public int getLastSubscriptionID() {
+        String sql = "SELECT MAX(SubscriptionID) as LastID FROM Subscription";
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("LastID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; // Trả về 0 nếu chưa có gói nào
     }
 } 

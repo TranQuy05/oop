@@ -88,19 +88,17 @@ public class Payment {
         this.cardType = cardType;
     }
 
-    // Method: PayMembership
     public void payMembership() {
-        // Logic thanh toán hội viên
     }
 
-    // Method: Check validity (nếu liên quan đến thẻ)
+
     public boolean checkValidity() {
-        // Logic kiểm tra tính hợp lệ của thanh toán hoặc thẻ
+        
         return true;
     }
 
-    // Method: Purchase card (nếu liên quan đến thẻ)
+ 
     public void purchaseCard() {
-        // Logic mua thẻ
+
     }
 } 

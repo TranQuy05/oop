@@ -15,5 +15,5 @@ public class TheHoiVien_HoiVien {
         this.HanThanhToan = HanThanhToan;
     }
 
-    // Getter, Setter
+ 
 }

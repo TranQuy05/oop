@@ -215,20 +215,55 @@ public class LopHocView {
         cbHuongDanVien.setValue(lop.getTrainerName());
         
         TextField tfLichHoc = new TextField(lop.getSchedule());
-        tfLichHoc.setPromptText("Lịch học");
+        tfLichHoc.setPromptText("Lịch học (VD: Thứ 2,4,6 - 18:00-19:30)");
 
-        dialog.getDialogPane().setContent(new VBox(10, 
+        // Thêm validation
+        tfTenLop.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.isEmpty()) {
+                tfTenLop.setStyle("-fx-border-color: red;");
+            } else {
+                tfTenLop.setStyle("");
+            }
+        });
+
+        tfLichHoc.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.isEmpty()) {
+                tfLichHoc.setStyle("-fx-border-color: red;");
+            } else {
+                tfLichHoc.setStyle("");
+            }
+        });
+
+        VBox content = new VBox(10);
+        content.getChildren().addAll(
             new Label("Tên lớp:"), tfTenLop,
             new Label("Huấn luyện viên:"), cbHuongDanVien,
             new Label("Lịch học:"), tfLichHoc
-        ));
+        );
+        content.setPadding(new Insets(20));
+
+        dialog.getDialogPane().setContent(content);
 
         ButtonType saveButtonType = new ButtonType("Lưu", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
 
+        // Validate trước khi lưu
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveButtonType) {
+                if (tfTenLop.getText().isEmpty() || cbHuongDanVien.getValue() == null || tfLichHoc.getText().isEmpty()) {
+                    showAlert("Lỗi", "Vui lòng điền đầy đủ thông tin!", Alert.AlertType.ERROR);
+                    return null;
+                }
+
+                // Lấy trainerID từ tên huấn luyện viên
+                int trainerID = controller.getTrainerIDFromName(cbHuongDanVien.getValue());
+                if (trainerID == -1) {
+                    showAlert("Lỗi", "Không tìm thấy huấn luyện viên!", Alert.AlertType.ERROR);
+                    return null;
+                }
+
                 lop.setClassName(tfTenLop.getText());
+                lop.setTrainerID(trainerID);
                 lop.setTrainerName(cbHuongDanVien.getValue());
                 lop.setSchedule(tfLichHoc.getText());
                 return lop;
@@ -244,6 +279,22 @@ public class LopHocView {
                 showAlert("Lỗi", "Cập nhật lớp học thất bại!", Alert.AlertType.ERROR);
             }
         });
+    }
+
+    private boolean validateLopHoc(String tenLop, String huongDanVien, String lichHoc) {
+        if (tenLop.isEmpty()) {
+            showAlert("Lỗi", "Vui lòng nhập tên lớp!", Alert.AlertType.ERROR);
+            return false;
+        }
+        if (huongDanVien == null) {
+            showAlert("Lỗi", "Vui lòng chọn huấn luyện viên!", Alert.AlertType.ERROR);
+            return false;
+        }
+        if (lichHoc.isEmpty()) {
+            showAlert("Lỗi", "Vui lòng nhập lịch học!", Alert.AlertType.ERROR);
+            return false;
+        }
+        return true;
     }
 
     private void showAlert(String title, String content, Alert.AlertType type) {

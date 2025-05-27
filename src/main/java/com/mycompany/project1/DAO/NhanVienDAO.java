@@ -111,7 +111,7 @@ public class NhanVienDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, staffID);
             if (stmt.executeUpdate() > 0) {
-                // Nếu xóa thành công từ Receptionist, xóa tiếp từ Users
+                // Nếu xóa thành công từ Receptionist, xóa tiếp từ user
                 return userDAO.xoaUser(staffID);
             }
             return false;
@@ -150,7 +150,6 @@ public class NhanVienDAO {
                 user.setAddress(rs.getString("Address"));
                 user.setPhoneNum(rs.getString("PhoneNum"));
                 user.setCitizenIdentification(rs.getString("CitizenIdentification"));
-
                 NhanVien nv = new NhanVien();
                 nv.setStaffID(rs.getInt("StaffID"));
                 nv.setStartWorkingDate(rs.getString("StartWorkingDate"));

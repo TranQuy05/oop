@@ -149,20 +149,26 @@ public class GoiDangKyView {
         btnThem.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         
         btnThem.setOnAction(e -> {
-            try {
-                GoiDangKy goi = new GoiDangKy();
-                goi.setSubName(tfTen.getText());
-                goi.setType(tfLoai.getText());
-                goi.setStartDate(dpNgay.getValue());
-                goi.setSubscriptionDetail(taChiTiet.getText());
-                goi.setStatus(cbTrangThai.getValue());
+            if (validateForm(tfTen, tfLoai, dpNgay, taChiTiet, cbTrangThai)) {
+                try {
+                    GoiDangKy goi = new GoiDangKy();
+                    goi.setSubName(tfTen.getText());
+                    goi.setType(tfLoai.getText());
+                    goi.setStartDate(dpNgay.getValue());
+                    goi.setSubscriptionDetail(taChiTiet.getText());
+                    goi.setStatus(cbTrangThai.getValue());
 
-                if (controller.themGoiDangKy(goi)) {
-                    clearForm(tfTen, tfLoai, dpNgay, taChiTiet, cbTrangThai);
-                    refreshTable();
+                    if (controller.themGoiDangKy(goi)) {
+                        clearForm(tfTen, tfLoai, dpNgay, taChiTiet, cbTrangThai);
+                        refreshTable();
+                        showAlert("Thành công", "Thêm gói đăng ký mới thành công!\nMã gói mới: " + goi.getSubscriptionID(), 
+                                 Alert.AlertType.INFORMATION);
+                    } else {
+                        showAlert("Lỗi", "Thêm gói đăng ký thất bại!", Alert.AlertType.ERROR);
+                    }
+                } catch (Exception ex) {
+                    showAlert("Lỗi", "Có lỗi xảy ra: " + ex.getMessage(), Alert.AlertType.ERROR);
                 }
-            } catch (Exception ex) {
-                showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.ERROR);
             }
         });
 
@@ -239,6 +245,17 @@ public class GoiDangKyView {
                 showAlert("Lỗi", "Cập nhật gói đăng ký thất bại!", Alert.AlertType.ERROR);
             }
         });
+    }
+
+    private boolean validateForm(TextField tfTen, TextField tfLoai, DatePicker dpNgay, 
+                               TextArea taChiTiet, ComboBox<String> cbTrangThai) {
+        if (tfTen.getText().isEmpty() || tfLoai.getText().isEmpty() || 
+            dpNgay.getValue() == null || taChiTiet.getText().isEmpty() || 
+            cbTrangThai.getValue() == null) {
+            showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.ERROR);
+            return false;
+        }
+        return true;
     }
 
     private void showAlert(String title, String content, Alert.AlertType type) {
